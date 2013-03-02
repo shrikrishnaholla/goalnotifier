@@ -2,6 +2,8 @@ goalnotifier
 ============
 
 A dirty hack to notify of any goals in ongoing Barcelona FC matches
+Works in all UNIX based operating systems with the libnotify package.   
+Works out-of-the-box in all Linux flavors
 
 Usage
 =====
