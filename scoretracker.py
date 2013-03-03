@@ -22,7 +22,7 @@ while True:
         scoreboard = soup.findAll('span')
         local[0] = scoreboard[0].text
         for element in scoreboard:
-            if element.attrMap != None and element.has_key('class') and 
+            if element.attrMap != None and element.has_key('class') and \
               element.attrMap['class'] == 'score-box js-data-bind-gameSummary15965-result_visitor':
                 refreshedlocal = scoreboard[:scoreboard.index(element)]
                 refreshedvisitor = scoreboard[scoreboard.index(element):]
@@ -33,28 +33,35 @@ while True:
                 scorer = (refreshedlocal[element].text, refreshedlocal[element+1].text)
                 if scorer not in local:
                     local.append(scorer)
-                    string = 'notify-send '+' \"Goal by '+scorer[1]+' at '+scorer[0]+'\" '+
-                        '\"Score: '+local[0]+' - '+score[0]+' : '+visitor[0]+' - '+score[1]+'\"'+
-                        ' --icon=dialog-information'
+                    string = 'notify-send '+' \"Goal by '+scorer[1]+' at '+scorer[0]+'\" ' \
+                        +'\"Score: '+local[0]+' - '+score[0]+' : '+visitor[0]+' - '+score[1]+'\"' \
+                        +' --icon=dialog-information'
                     os.system(string)
         
         for element in xrange(0,len(refreshedvisitor)):
-            if (refreshedvisitor[element].attrMap != None and 
-                refreshedvisitor[element].attrMap.get('class', None) == 'minute') or 
+            if (refreshedvisitor[element].attrMap != None and \
+                refreshedvisitor[element].attrMap.get('class', None) == 'minute') or \
               refreshedvisitor[element].text.find("'") != -1:
                 scorer = (refreshedvisitor[element].text, refreshedvisitor[element+1].text)
                 if scorer not in visitor:
                     visitor.append(scorer)
-                    string = 'notify-send '+' \"Goal by '+scorer[1]+' at '+scorer[0]+'\" '+
-                        '\"Score: '+local[0]+' - '+score[0]+' : '+visitor[0]+' - '+score[1]+'\"'+
-                        ' --icon=dialog-information'
+                    string = 'notify-send '+' \"Goal by '+scorer[1]+' at '+scorer[0]+'\" ' \
+                        +'\"Score: '+local[0]+' - '+score[0]+' : '+visitor[0]+' - '+score[1]+'\"' \
+                        +' --icon=dialog-information'
                     os.system(string)
     
     if soup.find('p', attrs={
                         'class':"date-time phase js-data-bind-gameSummary15965-status"
                         }).text.find('Finished') != 1:
         string = 'notify-send '+ '\'Game Finished\' '+\
-            '\"Final Score: '+local[0]+' - '+score[0]+' : '+visitor[0]+' - '+score[1]+'\"'+
+            '\"Final Score: '+local[0]+' - '+score[0]+' : '+visitor[0]+' - '+score[1] \
+            +"\nSummary:\n\n"+local[0]
+        for i in xrange(1,len(local)):
+            string += "\n"+local[i][0]+' '+local[i][1]
+        string+='\n\n'+visitor[0]
+        for i in xrange(1,len(visitor)):
+            string += "\n"+visitor[i][0]+' '+visitor[i][1]
+        string += '\"'+ \
             ' --icon=dialog-information'
         os.system(string)
         break
